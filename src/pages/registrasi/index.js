@@ -127,7 +127,7 @@ function Registrasi(){
 
     }
 
-    console.log(form)
+    // console.log(form)
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -167,6 +167,10 @@ function Registrasi(){
 
     }
 
+    // const handleKlik = () => {
+    //     console.log(auth)
+    // }
+
     if(loading){
         return <AppLoading/>
     }
@@ -185,7 +189,9 @@ function Registrasi(){
                 component="h1" 
                 className={classes.title}>Buat Akun Baru
             </Typography>
-            <form onSubmit={handleSubmit} noValidate>
+            <form 
+            onSubmit={handleSubmit} 
+            noValidate>
                 <TextField 
                     id="email"
                     name="email"
@@ -231,6 +237,7 @@ function Registrasi(){
                 <Grid container className={classes.buttons}>
                     <Grid item xs>
                         <Button 
+                        // onClick={handleKlik}
                         color="primary" 
                         variant="contained" 
                         size="large" 

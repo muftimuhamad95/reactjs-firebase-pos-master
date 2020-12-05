@@ -1,10 +1,10 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 // import firebase context
-import {useFirebase} from '../../../components/FirebaseProvider'
+// import {useFirebase} from '../../../components/FirebaseProvider'
 function Home(){
     
-    const {auth} = useFirebase();
+    // const {auth} = useFirebase();
 
     return (
     <div>

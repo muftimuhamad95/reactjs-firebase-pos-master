@@ -13,7 +13,9 @@ import {Redirect} from 'react-router-dom';
 import AppLoading from '../../components/AppLoading/AppLoading';
 
 
-function Login(){
+function Login(props){
+
+    const {location} = props;
 
     const classes = useStyle();
 
@@ -86,11 +88,15 @@ function Login(){
     }
 
     
-    if(user){
-        return <Redirect to="/"/>
-    }
     if(loading){
         return <AppLoading/>
+    }
+    if(user){
+        const redirectTo = location.state &&
+        location.state.from &&
+        location.state.from.pathname ?
+        location.state.from.pathname : '/';
+        return <Redirect to={redirectTo}/>
     }
     
     const handleChange = e => {
