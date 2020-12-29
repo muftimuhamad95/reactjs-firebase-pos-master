@@ -15,6 +15,7 @@ import FirebaseProvider from './components/FirebaseProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import theme from './config/theme';
+import { SnackbarProvider } from 'notistack';
 
 
 
@@ -24,6 +25,7 @@ function App() {
     <CssBaseline/>
     <ThemeProvider theme={theme}>
     <FirebaseProvider>
+    <SnackbarProvider maxSnack={3}>
       <Router>
         <Switch>
         {/* private routing */}
@@ -38,6 +40,7 @@ function App() {
           <Route component={NotFound}/>
         </Switch>
       </Router>
+      </SnackbarProvider>
       </FirebaseProvider>
     </ThemeProvider>
     </>

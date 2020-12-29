@@ -24,7 +24,6 @@ function Pengaturan(props){
 
     return (
     <div>
-        
         <Paper square>
             <Tabs
             value={location.pathname}

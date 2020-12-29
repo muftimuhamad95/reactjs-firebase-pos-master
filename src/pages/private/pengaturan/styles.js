@@ -7,7 +7,6 @@ const useStyles = makeStyles(theme => ({
     fieldPengguna : {
         display: 'flex',
         flexDirection: 'column',
-        padding: 'normal',
         width: theme.spacing(26)
     }
 }))

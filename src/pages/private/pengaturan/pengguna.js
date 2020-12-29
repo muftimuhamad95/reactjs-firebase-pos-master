@@ -3,6 +3,9 @@ import TextField from '@material-ui/core/TextField';
 import { useFirebase } from '../../../components/FirebaseProvider';
 import isEmail from 'validator/lib/isEmail';
 import useStyles from './styles';
+import { useSnackbar } from 'notistack';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 
 function Pengguna(){
@@ -11,7 +14,9 @@ function Pengguna(){
   const displayNameRef = useRef();
   const emailRef = useRef();
   const { user } = useFirebase();
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles()
+
 
   //create states
   const [isSubmitting,setSubmitting] = useState(false);
@@ -36,10 +41,13 @@ function Pengguna(){
         displayName
       });
       setSubmitting(false);
-      alert('nama berhasil dirubah');
+      // alert('nama berhasil dirubah');
+      enqueueSnackbar('nama berhasil dirubah',{
+        variant: 'success'
+      })
     }
   }
-    
+  
   const saveUpdateEmail = async (e) => {
     const displayEmailRef = emailRef.current.value;
     console.log(user)
@@ -58,24 +66,62 @@ function Pengguna(){
       })
       setSubmitting(true)
       await user.updateEmail(displayEmailRef)
-      .then(function() {
-        // Update successful.
-        alert('email updated!')
+      .then(() => {
+        // alert('email updated!')
+        enqueueSnackbar('email berhasil dirubah, segera verifikasi email !',{
+          variant: 'success'
+        })
       })
-      .catch(function(error) {
+      .catch( error => {
         alert(error)
       });
       setSubmitting(false)
     }
   }
 
+  const emailVerification = async (e) => {
+    const actionCodeSettings = {
+      url: `${window.location.origin}/login`
+    };
+    // console.log(actionCodeSettings)
+    // setSubmitting(true);
+    // await user.sendEmailVerification(actionCodeSettings)
+    // .then(() => {
+    //     enqueueSnackbar(`Verifikasi email telah dikirim ke ${user.email}`,{
+    //         variant:"success"
+    //       })
+    // })
+    // .catch( e => {
+      //     enqueueSnackbar(`Pesan ${e}`,{
+        //         variant:"error"
+        //       })
+        // })
+    setSubmitting(true);
+    try{
+      await user.sendEmailVerification(actionCodeSettings)
+      .then(() => {
+        enqueueSnackbar(`Verifikasi email telah dikirim ke ${user.email}`,{
+          variant:"success"
+        })
+      })
+    }
+    catch(e) {
+      enqueueSnackbar(`Pesan ${e}`,{
+        variant:"error"
+      })
+    }
+    setSubmitting(false);
+  }
+
+
     return (
-    <div className={classes.fieldPengguna}>
+      <div className={classes.fieldPengguna}>
          <TextField
-        id="displayName"
-        name="displayName"
-        label="Nama"
-        defaultValue={user.displayName}
+         margin="normal"
+         id="displayName"
+         name="displayName"
+         label="Nama"
+         defaultValue={user.displayName}
         inputProps={{
           ref: displayNameRef,
           onBlur: saveDisplayName
@@ -83,15 +129,9 @@ function Pengguna(){
         disabled={isSubmitting}
         helperText={error.displayName}
         error={error.displayName?true:false}
-        // InputProps={{
-        //   startAdornment: (
-        //     <InputAdornment position="start">
-        //       <AccountCircle />
-        //     </InputAdornment>
-        //   ),
-        // }}
       />
          <TextField
+        margin="normal"
         id="email"
         name="email"
         label="email"
@@ -103,14 +143,32 @@ function Pengguna(){
         disabled={isSubmitting}
         helperText={error.email}
         error={error.email?true:false}
-        // InputProps={{
-        //   startAdornment: (
-        //     <InputAdornment position="start">
-        //       <AccountCircle />
-        //     </InputAdornment>
-        //   ),
-        // }}
       />
+      {
+        user.emailVerified?
+        <Typography 
+          margin="normal"
+          color="primary"
+          variant="caption">
+          Email sudah diverifikasi
+        </Typography>
+        :
+        <Button 
+          margin="normal"
+          variant="outlined"
+          color="default"
+          size="small"
+          onClick={emailVerification}
+          disabled={isSubmitting?true:false}>
+            Kirim Verifikasi Email
+        </Button>
+      }
+      {
+        user.providerData.forEach(profile=>{
+          console.log(profile)
+        })
+      }
+
     </div>
     ) 
 }
